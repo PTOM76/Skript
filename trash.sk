@@ -1,0 +1,47 @@
+options:
+	title: ゴミ箱
+	close: &c閉じる
+	empty: &cゴミ箱を空にする
+command /trash [<player>]:
+	trigger:
+		if arg-1 is set:
+			if executor is player:
+				if player is op:
+					set {_p} to arg-1
+				else:
+					send "&cあなたにプレイヤーを指定する権限はありません。" to player
+			else:
+				set {_p} to arg-1
+		else:
+			set {_p} to player
+		open chest inventory with 6 row named "{@title}" to {_p}
+		loop 9 times:
+			set slot (44 + loop-number) of {_p}'s current inventory to gray stained glass pane named " "
+		loop 3 times:
+			set slot (47 + loop-number) of {_p}'s current inventory to red stained glass pane named "{@close}"
+		loop 45 times:
+			set slot (loop-number - 1) of {_p}'s current inventory to {tmpTrashData::%{_p}%::%loop-number%}
+		set slot 46 of {_p}'s current inventory to barrier named "{@empty}"
+on inventory click:
+	if name of player's current inventory contains "{@title}":
+		if clicked item is red stained glass pane named "{@close}":
+			cancel event
+			close player's inventory
+		if clicked item is barrier named "{@empty}":
+			cancel event
+			delete {tmpTrashData::%player%::*}
+			loop 45 times:
+				set slot (loop-number - 1) of player's current inventory to air
+		if clicked item is gray stained glass pane named " ":
+			cancel event
+on inventory close:
+	if name of event-inventory contains "{@title}":
+		delete {tmpTrashData::%player%::*}
+		loop 45 times:
+			set {tmpTrashData::%player%::%loop-number%} to slot (loop-number - 1) of event-inventory
+command /trashdebug [<int>]:
+	permission: admin
+	trigger:
+		send "%{tmpTrashData::%player%::%arg-1%}%"
+on quit:
+	delete {tmpTrashData::%player%::*}

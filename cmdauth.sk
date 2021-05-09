@@ -1,0 +1,102 @@
+options:
+	# パスワードの設定
+	pass: 1234
+	# サーバー所持者
+	owner: Pitan_MAD
+on load:
+	#認証必須コマンド
+	delete {authCommands::*}
+	add "kill" to {authCommands::*}
+	add "minecraft:kill" to {authCommands::*}
+	add "pardon" to {authCommands::*}
+	add "minecraft:pardon" to {authCommands::*}
+	add "ban" to {authCommands::*}
+	add "minecraft:ban" to {authCommands::*}
+	add "sk" to {authCommands::*}
+	add "skript:sk" to {authCommands::*}
+	add "skript" to {authCommands::*}
+	add "skript:skript" to {authCommands::*}
+	add "op" to {authCommands::*}
+	add "minecraft:op" to {authCommands::*}
+	add "deop" to {authCommands::*}
+	add "minecraft:deop" to {authCommands::*}
+	add "kick" to {authCommands::*}
+	add "minecraft:kick" to {authCommands::*}
+	add "fill" to {authCommands::*}
+	add "minecraft:fill" to {authCommands::*}
+	add "stop" to {authCommands::*}
+	add "minecraft:stop" to {authCommands::*}
+	add "restart" to {authCommands::*}
+	add "minecraft:restart" to {authCommands::*}
+	add "pex" to {authCommands::*}
+	add "permissionsex:pex" to {authCommands::*}
+	add "co" to {authCommands::*}
+	add "coreprotect:co" to {authCommands::*}
+	add "coreprotect" to {authCommands::*}
+	add "coreprotect:coreprotect" to {authCommands::*}
+	add "reload" to {authCommands::*}
+	add "minecraft:reload" to {authCommands::*}
+on command:
+	if {authCommands::*} contains strtolower("%command%"):
+		sender is player
+		if player is op:
+			if {autoAuther::*} contains player:
+				set {_authed::%player%} to true
+			else:
+				cancel event
+				set {authingCmd::%player%} to "%complete command%"
+				chatAuth(player)
+on place of command block:
+	if player is op:
+		if {autoAuther::*} contains player:
+			set {_authed::%player%} to true
+		else:
+			cancel event
+			send "&cあなたにその権限はありません。"
+command /unban [<text>]:
+	trigger:
+		execute player command "/pardon %arg-1%"
+function chatAuth(p: player):
+	send "&bパスワードを入力してください。" to {_p}
+	set {chatAuth::%{_p}%} to true
+on chat:
+	if {chatAuth::%player%} = true:
+		cancel event
+		if {authingCmd::%player%} is set:
+			if "%message%" contains "{@pass}":
+				send "&aパスワード認証に成功したのでコマンド「%{authingCmd::%player%}%&a」が実行されました。"
+				command "%{authingCmd::%player%}%"
+			else:
+				send "&cパスワードが間違っているのでコマンド「%{authingCmd::%player%}%&c」が実行されませんでした。"
+			delete {authingCmd::%player%}
+		delete {chatAuth::%player%}
+command /ownerfix:
+	permission: admin
+	trigger:
+		if player's name is "{@owner}":
+			if {autoAuther::*} contains player:
+				send "&c既にあなたは自動認証者です。"
+			else:
+				add player to {autoAuther::*}
+				send "&a自動認証者リストへ{@owner}を入れました。"
+command /addautoauther [<player>]:
+	permission: admin
+	trigger:
+		if {autoAuther::*} contains arg-1:
+			send "&c既に%arg-1%は自動認証者です。"
+			stop
+		if {autoAuther::*} contains player:
+			add arg-1 to {autoAuther::*}
+			send "&a自動認証者にあなたは入りました。" to arg-1
+			send "&a自動認証者に%arg-1%&aを入れました。" to player
+		else:
+			send "&cあなたにその権限はありません。"
+command /removeautoauther [<player>]:
+	permission: admin
+	trigger:			
+		if {autoAuther::*} contains player:
+			remove arg-1 from {autoAuther::*}
+			#send "&c自動認証者の権限をあなたは削除されました。。" to arg-1
+			send "&c自動認証者の権限を%arg-1%&cから削除しました。" to player
+		else:
+			send "&cあなたにその権限はありません。"

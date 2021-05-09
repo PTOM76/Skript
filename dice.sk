@@ -1,0 +1,24 @@
+command /dice [<int>]:
+	trigger:
+		if arg-1 is set:
+			if {dice.cooltime::%player%} = true:
+				send "&c"
+			set {_rand::%player%} to random integer between 1 and arg-1
+			if {_rand::%player%} is 1:
+				set {_dice} to "⚀"
+			if {_rand::%player%} is 2:
+				set {_dice} to "⚁"
+			if {_rand::%player%} is 3:
+				set {_dice} to "⚂"
+			if {_rand::%player%} is 4:
+				set {_dice} to "⚃"
+			if {_rand::%player%} is 5:
+				set {_dice} to "⚄"
+			if {_rand::%player%} is 6:
+				set {_dice} to "⚅"
+			if {_rand::%player%} is greater than 7:
+				set {_dice} to "⍰"
+			send "&f[&cサイコロ&f] &7%{_dice}% &6&l%player%さん&fは&a%arg-1%面体&fのサイコロを振って %{_rand::%player%}% がでました。" to all players
+			set {dice.cooltime::%player%} to true
+			second 3 waits
+			delete {dice.cooltime::%player%}
