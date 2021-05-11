@@ -100,3 +100,36 @@ command /removeautoauther [<player>]:
 			send "&c自動認証者の権限を%arg-1%&cから削除しました。" to player
 		else:
 			send "&cあなたにその権限はありません。"
+#functions etc.
+on script load:
+    set {_letters} to "Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz"
+    set {_letter-pairs::*} to {_letters} split at " "
+    loop {_letter-pairs::*}:
+        set {_pair::*} to loop-value split at ""
+        set {_uppercase} to {_pair::1}
+        set {_lowercase} to {_pair::2}
+        set {letters::uppercase::%{_lowercase}%} to {_uppercase}
+        set {letters::lowercase::%{_uppercase}%} to {_lowercase}
+on script unload:
+    delete {letters::*}
+function switchCaseFor(text: text, to-uppercase: boolean) :: text:
+    set {_characters::*} to {_text} split at ""
+    set {_new} to ""
+    loop {_characters::*}:
+        set {_char} to loop-value
+        if {_to-uppercase} is true:
+            set {_char} to {letters::uppercase::%loop-value%}
+        else:
+            set {_char} to {letters::lowercase::%loop-value%}
+        set {_new} to "%{_new}%%{_char}%"
+    return {_new}
+function strtoupper(text: text) :: text:
+    return switchCaseFor({_text}, true)
+function strtolower(text: text) :: text:
+    return switchCaseFor({_text}, false)
+function capitalize(text: text) :: text:
+    set {_char} to the first character of {_text}
+    set {_char} to {letters::uppercase::%{_char}%}
+    set {_remaining} to ""
+    set {_remaining} to the last (length of {_text} - 1) characters of {_text}
+    return "%{_char}%%{_remaining}%"
