@@ -1,0 +1,153 @@
+options:
+	gamename: eme.io
+on any movement:
+	if player is sprinting:
+		if player is in world "test":
+			if {rasuku.io.long.size::%player%} is greater than or equal to 25:
+				set {rasuku.io.running::%player%} to 1
+			else:
+				cancel event
+every 30 ticks:
+	loop all players:
+		if loop-player is in world "test":
+			if {rasuku.io.running::%loop-player%} is 1:
+				if {rasuku.io.long.size::%loop-player%} is greater than or equal to 25:
+					remove 1 from {rasuku.io.long.size::%loop-player%}
+					set {rasuku.io.running::%loop-player%} to 0
+on walking on black wool:
+#	if player is in world "￣￣￣￣￣":
+	if player is in world "test":
+		if {rasuku.io.long.size::%player%} is not set:
+			set {rasuku.io.long.size::%player%} to 24
+		set event-block to black wool
+		wait 0.1 seconds
+		set event-block to light gray wool
+		wait 0.1 seconds
+		set event-block to gray wool
+		wait 0.1 seconds
+		set event-block to {rasuku.io.color::%player%}
+		loop {rasuku.io.long.size::%player%} times:
+			wait 3 ticks
+		set event-block to black wool
+command /{@gamename}:
+	trigger:
+		if player is not in world "test":
+			command "mvtp %player% test"
+			stop
+		if {rasuku.io.color::%player%} is not set:
+			set {rasuku.io.color::%player%} to white wool
+		open chest with 6 row named "&0&l{@gamename}" to player
+		set slot 0 of player's current inventory to {rasuku.io.color::%player%} named "&fカラー変更"
+		set slot 53 of player's current inventory to emerald ore named "&fEmeraldのロビーへ戻る"
+on inventory click:
+	if name of player's current inventory is "&0&l{@gamename}":
+		cancel event
+		if name of clicked item is "&fカラー変更":
+			if type of clicked item is white wool:
+				set {_c} to orange wool
+			if type of clicked item is orange wool:
+				set {_c} to magenta wool
+			if type of clicked item is magenta wool:
+				set {_c} to light blue wool
+			if type of clicked item is light blue wool:
+				set {_c} to yellow wool
+			if type of clicked item is yellow wool:
+				set {_c} to lime wool
+			if type of clicked item is lime wool:
+				set {_c} to pink wool
+			if type of clicked item is pink wool:
+				set {_c} to red wool
+			if type of clicked item is red wool:
+				set {_c} to white wool
+			set {rasuku.io.color::%player%} to {_c}
+			set clicked item to {_c} named "&fカラー変更"
+		if clicked item is emerald ore named "&fEmeraldのロビーへ戻る":
+			set {rasuku.io.long.size::%player%} to 24
+			command "mvtp %player% world"
+			execute player command "/move lobby" 
+every ticks:
+	loop all players in world "test":
+#		if loop-player is in world "￣￣￣￣￣":
+		if loop-player is in world "test":
+			if block under loop-player is white wool or orange wool or magenta wool or light blue wool or yellow wool or lime wool or pink wool or red wool:
+				if "%block under loop-player%" is "%{rasuku.io.color::%loop-player%}%":
+					stop
+				kill loop-player
+				set {_s} to {rasuku.io.long.size::%loop-player%} -9
+				set {_int} to round({_s}/2)
+				drop 1 of sea lantern named "death_rasuku_io_beads%{_int}%" at loop-player's location
+				stop
+on join:
+	if {rasuku.io.color::%player%} is not set:
+		set {rasuku.io.color::%player%} to white wool
+every 1 seconds:
+	loop all players in world "test":
+		loop all blocks in radius 5 around loop-player:
+			if loop-block is black wool:
+				if (random integer between 1 and 4) is 2:
+					set {_x} to loop-block's x-coordinate
+					set {_y} to loop-block's y-coordinate + 1
+					set {_z} to loop-block's z-coordinate
+					drop 1 of white wool named "rasuku_io_beads" at location at {_x}, {_y}, {_z} in world "test"
+					if (random integer between 1 and 3) is 1:
+						exit 1 loops
+on death:
+	if victim is player:
+		if victim is in world "test":
+			set the death message to "&8&l[&f&l{@gamename}&8&l]&f%victim% さんはやられた。Score:%{rasuku.io.long.size::%victim%} -14%"
+			set {rasuku.io.long.size::%victim%} to 24
+every 2 ticks:
+	loop all players:
+		if loop-player is in world "test":
+			if {rasuku.io.high_score::%loop-player%} is not set:
+				set {rasuku.io.high_score::%loop-player%} to 0
+			if {rasuku.io.high_score::%loop-player%} is less than or equal to {rasuku.io.long.size::%loop-player%} - 14:
+				set {rasuku.io.high_score::%loop-player%} to {rasuku.io.long.size::%loop-player%} -14
+			set action bar of loop-player to "&2{@gamename} Score&7:&e%{rasuku.io.long.size::%loop-player%} - 14% &2HighScore&7:&c%{rasuku.io.high_score::%loop-player%}%"
+on item spawn:
+	if name of event-item is "rasuku_io_beads":
+		set {_r} to 0
+		loop 20000 times:
+			if event-entity is not set:
+				stop
+			if {_r} is 15:
+				set {_r} to 0
+			wait 5 ticks
+			set item of event-entity to {rib.color::%{_r}%} named "rasuku_io_beads"
+			add 1 to {_r}
+		kill event-entity
+command /deletebeads:
+	trigger:
+		set {rasuku.io.db} to 1
+on pick up:
+	if name of event-item is "rasuku_io_beads":
+		cancel event
+		kill event-entity
+		command "/execute %player% ~ ~ ~ playsound entity.experience_orb.pickup player @p ~ ~ ~ 2 1"
+		add 1 to {rasuku.io.long.size::%player%}
+	if name of event-item contains "death_rasuku_io_beads":
+		cancel event
+		kill event-entity
+		command "/execute %player% ~ ~ ~ playsound entity.experience_orb.pickup player @p ~ ~ ~ 2 1"
+		set {_name} to name of event-item
+		replace all "death_rasuku_io_beads" with "" in {_name}
+		set {_int} to {_name} parsed as an integer
+		add {_int} to {rasuku.io.long.size::%player%}
+
+on load:
+	set {rib.color::0} to white wool
+	set {rib.color::1} to orange wool
+	set {rib.color::2} to purple wool
+	set {rib.color::3} to light blue wool
+	set {rib.color::4} to blue wool
+	set {rib.color::5} to red wool
+	set {rib.color::6} to yellow wool
+	set {rib.color::7} to black wool
+	set {rib.color::8} to gray wool
+	set {rib.color::9} to light gray wool
+	set {rib.color::10} to pink wool
+	set {rib.color::11} to lime wool
+	set {rib.color::12} to magenta wool
+	set {rib.color::13} to green wool
+	set {rib.color::14} to cyan wool
+	set {rib.color::15} to brown wool
