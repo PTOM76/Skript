@@ -1,0 +1,221 @@
+on fishing:
+	if player is in "fishing_server":
+		if "%fishing state%" is "CAUGHT_FISH":
+			if lore of player's tool contains "魚が集まるすご～い餌付き":
+				set {_r1} to random integer between 1 and 30
+				if {_r1} is 27:
+					set {_r} to random integer between 1 and {fish.rtype.amount}
+					set {_r2} to "r%{_r}%"
+				else:
+					set {_r2} to random integer between 1 and {fish.type.amount}
+				if {_r1} is 3:
+					set {_r} to random integer between 1 and 5
+					if {_r} is 7:
+						send "&a%player%&fさんは&9&lポンドロード&fに勝利して&1&lFishing King&fの称号を手に入れた！！"
+						send "%player%さんはポンドロードに勝利して**Fishing King**の称号を手に入れた！！:tada::tada: " to channel with id "706742213731811389" with "eb"
+						set {fish.rank::%player%} to "&9&l[&1&lFishing_King&f&9&l]"
+						command "/pex user %player% prefix %{fish.rank::%player%}%&f"
+						set {_r2} to "pl"
+					else:
+						set {_r2} to random integer between 1 and {fish.type.amount}
+				else:
+					set {_r2} to random integer between 1 and {fish.type.amount}
+				set item of caught fish to 1 of {fish.%{_r2}%}
+				send "&f[&9釣り場&f]&a%player%&fさんが%name of player's tool%&fで%{fish.%{_r2}%.name}%&fを釣った！" to all players
+				send "[釣り場&f]%player%さんが%name of player's tool%で%{fish.%{_r2}%.name}%を釣った！" to channel with id "706742213731811389" with "eb"
+on load:
+	set {fish.type.amount} to 16
+	set {fish.rtype.amount} to 4
+	set {fish.vtype.amount} to 4
+	set {fish.1.name} to "&9&lフナ"
+	set {fish.2.name} to "&c&lサケ"
+	set {fish.3.name} to "&4&l腐ったステーキ"
+	set {fish.4.name} to "&9&l釣り場コイン"
+	set {fish.5.name} to "&c&lマス"
+	set {fish.6.name} to "&fワカサギ"
+	set {fish.7.name} to "&7&n捨てられたログイン宝箱"
+	set {fish.8.name} to "&fメダカ"
+	set {fish.9.name} to "&fニジマス"
+	set {fish.10.name} to "&fアユ"
+	set {fish.11.name} to "&fヤマメ"
+	set {fish.12.name} to "&fハゼ"
+	set {fish.13.name} to "&fコイ"
+	set {fish.14.name} to "&fナマズ"
+	set {fish.15.name} to "&fソウギョ"
+	set {fish.16.name} to "&4&lログマ"
+	set {fish.v1.name} to "生魚"
+	set {fish.v2.name} to "生鮭"
+	set {fish.v3.name} to "クマノミ"
+	set {fish.v4.name} to "フグ"
+	set {fish.r1.name} to "&6&lイワナ"
+	set {fish.r2.name} to "&6&lブラックバス"
+	set {fish.r3.name} to "&6&lイトウ"
+	set {fish.r4.name} to "&6&lウナギ"
+	set {fish.pl.name} to "&4&k&o&l||&9&l&n&oPOND&r &6&l&n&oLORD&4&k&o&l||&r"
+	set {fish.1.value} to 10000
+	set {fish.2.value} to 15000
+	set {fish.3.value} to 100
+	set {fish.4.value} to 5000
+	set {fish.5.value} to 12500
+	set {fish.6.value} to 500
+	set {fish.7.value} to 77
+	set {fish.8.value} to 250
+	set {fish.9.value} to 250
+	set {fish.10.value} to 2500
+	set {fish.11.value} to 4000
+	set {fish.12.value} to 3000
+	set {fish.13.value} to 1500
+	set {fish.14.value} to 7500
+	set {fish.15.value} to 25000
+	set {fish.16.value} to 500000
+	set {fish.v1.value} to 250
+	set {fish.v2.value} to 500
+	set {fish.v3.value} to 500
+	set {fish.v4.value} to 1000
+	set {fish.pl.value} to 500000000
+	set {fish.r1.value} to 500000
+	set {fish.r2.value} to 50000
+	set {fish.r3.value} to 150000
+	set {fish.r4.value} to 300000
+	set {fish.1} to raw fish named "%{fish.1.name}%" with lore "&f体長20cmはありそうだ"
+	set {fish.2} to salmon named "%{fish.2.name}%" with lore "&f体長70cmぐらいある"
+	set {fish.3} to rotten flesh named "%{fish.3.name}%" with lore "&f食べたら腹を壊すだろう"
+	set {fish.4} to pufferfish named "%{fish.4.name}%" with lore "&4&l持つと痛い&fこれはコイン？？？" and "&f釣り場の釣りスロットで使える"
+	set {fish.5} to raw fish named "%{fish.5.name}%" with lore "&f体調60cmはあるだろう"
+	set {fish.6} to raw fish named "%{fish.6.name}%" with lore "&f体調15cmである"
+	set {fish.7} to chest named "%{fish.7.name}%" with lore "&fボロボロである...使えないだろう"
+	set {fish.8} to raw fish named "%{fish.8.name}%" with lore "&f体長約2.5cmだろう..."
+	set {fish.9} to raw fish named "%{fish.9.name}%" with lore "&f体長約50cmだろう..."
+	set {fish.10} to raw fish named "%{fish.10.name}%" with lore "&f体長約30cmだろう..."
+	set {fish.11} to raw fish named "%{fish.11.name}%" with lore "&f体長約15cmだろう..."
+	set {fish.12} to raw fish named "%{fish.12.name}%" with lore "&f体長約20cmだろう..."
+	set {fish.13} to raw fish named "%{fish.13.name}%" with lore "&f体長約60cmだろう..."
+	set {fish.14} to raw fish named "%{fish.14.name}%" with lore "&f体長約50cmだろう..."
+	set {fish.15} to raw fish named "%{fish.15.name}%" with lore "&f体長1mだろう..."
+	set {fish.16} to raw fish named "%{fish.16.name}%" with lore "&f体長2.5mだろう...(&mログマとは...&r)"
+	set {fish.v1} to raw fish with nbt ""
+	set {fish.v2} to salmon with nbt ""
+	set {fish.v3} to clownfish with nbt ""
+	set {fish.v4} to pufferfish with nbt ""
+	set {fish.pl} to raw fish of Lure 1 named "%{fish.pl.name}%" with lore "&f釣り場の池の主であり超レアである。これを釣った人は&1&l&nFishing King&fという称号が付けられる。"
+	set {fish.r1} to raw fish named "%{fish.r1.name}%" with lore "&f体長30cmぐらいあり、この魚はレアであるそうだ"
+	set {fish.r2} to raw fish named "%{fish.r2.name}%" with lore "&f体長50cmぐらいあり、この魚はレアであるそうだ"
+	set {fish.r3} to raw fish named "%{fish.r3.name}%" with lore "&f体長1mぐらいあり、この魚はレアであるそうだ"
+	set {fish.r4} to raw fish named "%{fish.r4.name}%" with lore "&f体長80cmぐらいあり、この魚はレアであるそうだ"
+command /playersellfish [<player>]:
+	permission: admin
+	trigger:
+		execute arg-1 command "sellfish"
+command /givegish [<text>]:
+	permission: admin
+	trigger:
+		give {fish.%arg-1%} to player
+on rightclick on light blue shulker box:
+	if inventory name of block is "/sellfish":
+		cancel event
+		execute player command "/sellfish"
+command /sellfish:
+	trigger:
+		if player is in "build_world":
+			send "&c建築サーバーで売却メニューを開くことはできません。" to player
+			stop
+		open chest with 6 row named "&9&l釣ったものを売却" to player
+		set {_s} to 45
+		loop 3 times:
+			set slot {_s} of player's current inventory to red stained glass pane named "&cキャンセル(Cancel)"
+			add 1 to {_s}
+		loop 3 times:
+			set slot {_s} of player's current inventory to green stained glass pane named "&a売却(Sell)" with lore "&f0EM"
+			add 1 to {_s}
+		loop 3 times:
+			set slot {_s} of player's current inventory to blue stained glass pane named "&b更新(Reload)" with lore "&f売却の数値が更新されない場合はここをクリックしてください。"
+			add 1 to {_s}
+on inventory click:
+	if name of player's current inventory is "&9&l釣ったものを売却":
+		if name of clicked item is "&cキャンセル(Cancel)":
+			cancel event
+			set {sell::%player%} to 2
+			close player's inventory
+			stop
+		if name of clicked item is "&a売却(Sell)":
+			cancel event
+			set {sell::%player%} to 1
+			close player's inventory
+			stop
+		if name of clicked item is "&b更新(Reload)":
+			cancel event
+			set {_s} to 0
+			loop inventory size of event-inventory - 9 times:
+				loop {fish.type.amount} times:
+					if slot {_s} of event-inventory is {fish.%loop-number-2%}:
+						add {fish.%loop-number-2%.value} * item amount of slot {_s} of event-inventory to {_money}
+				loop {fish.rtype.amount} times:
+					if slot {_s} of event-inventory is {fish.r%loop-number-2%}:
+						add {fish.r%loop-number-2%.value} * item amount of slot {_s} of event-inventory to {_money}
+				loop {fish.vtype.amount} times:
+					if slot {_s} of event-inventory is {fish.v%loop-number-2%}:
+						add {fish.v%loop-number-2%.value} * item amount of slot {_s} of event-inventory to {_money}
+				if slot {_s} of event-inventory is {fish.pl}:
+					add {fish.pl.value} * item amount of slot {_s} of event-inventory to {_money}
+				add 1 to {_s}
+			set {_s} to 48
+			loop 3 times:
+				set slot {_s} of player's current inventory to green stained glass pane named "&a売却(Sell)" with lore "&f%{_money}%EM"
+				add 1 to {_s}
+			set {_s} to 0
+		loop inventory size of event-inventory - 9 times:
+			loop {fish.type.amount} times:
+				if slot {_s} of event-inventory is {fish.%loop-number-2%}:
+					add {fish.%loop-number-2%.value} * item amount of slot {_s} of event-inventory to {_money}
+			loop {fish.rtype.amount} times:
+				if slot {_s} of event-inventory is {fish.r%loop-number-2%}:
+					add {fish.r%loop-number-2%.value} * item amount of slot {_s} of event-inventory to {_money}
+			loop {fish.vtype.amount} times:
+				if slot {_s} of event-inventory is {fish.v%loop-number-2%}:
+					add {fish.v%loop-number-2%.value} * item amount of slot {_s} of event-inventory to {_money}
+			if slot {_s} of event-inventory is {fish.pl}:
+				add {fish.pl.value} * item amount of slot {_s} of event-inventory to {_money}
+			add 1 to {_s}
+		set {_s} to 48
+		loop 3 times:
+			set slot {_s} of player's current inventory to green stained glass pane named "&a売却(Sell)" with lore "&f%{_money}%EM"
+			add 1 to {_s}
+
+on inventory close:
+	if name of event-inventory is "&9&l釣ったものを売却":
+		if {sell::%player%} is not 2:
+			delete {_money}
+			set {_s} to 0
+			send "&9&l]&9&l&n&m========&fSell Fish&9&l&n&m========&9&l[" to player
+			loop inventory size of event-inventory - 9 times:
+				loop {fish.type.amount} times:
+					if slot {_s} of event-inventory is {fish.%loop-number-2%}:
+						add {fish.%loop-number-2%.value} * item amount of slot {_s} of event-inventory to {_money}
+						send "%{fish.%loop-number-2%.name}%&f x %item amount of slot {_s} of event-inventory%&7:&f%{fish.%loop-number-2%.value} * item amount of slot {_s} of event-inventory%EM" to player
+						set {_sell1} to 1
+				loop {fish.rtype.amount} times:
+					if slot {_s} of event-inventory is {fish.r%loop-number-2%}:
+						add {fish.r%loop-number-2%.value} * item amount of slot {_s} of event-inventory to {_money}
+						send "%{fish.r%loop-number-2%.name}%&f x %item amount of slot {_s} of event-inventory%&7:&f%{fish.r%loop-number-2%.value} * item amount of slot {_s} of event-inventory%EM" to player
+						set {_sell1} to 1
+				loop {fish.vtype.amount} times:
+					if slot {_s} of event-inventory is {fish.v%loop-number-2%}:
+						add {fish.v%loop-number-2%.value} * item amount of slot {_s} of event-inventory to {_money}
+						send "%{fish.v%loop-number-2%.name}%&f x %item amount of slot {_s} of event-inventory%&7:&f%{fish.v%loop-number-2%.value} * item amount of slot {_s} of event-inventory%EM" to player
+						set {_sell1} to 1
+				if slot {_s} of event-inventory is {fish.pl}:
+					add {fish.pl.value} * item amount of slot {_s} of event-inventory to {_money}
+					send "%{fish.pl.name}%&f x %item amount of slot {_s} of event-inventory%&7:&f%{fish.pl.value} * item amount of slot {_s} of event-inventory%EM" to player
+					set {_sell1} to 1
+				if {_sell1} is not set:
+					give slot {_s} of event-inventory to player
+				add 1 to {_s}
+				delete {_sell1}
+			delete {sell::%player%}
+			command "emc %player% add %{_money}%"
+		if {sell::%player%} is 2:
+			set {_s} to 0
+			loop inventory size of event-inventory - 9 times:
+				give slot {_s} of event-inventory to player
+				add 1 to {_s}
+			delete {sell::%player%}
