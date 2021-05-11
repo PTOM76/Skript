@@ -1,0 +1,34 @@
+command /setpoint [<text>]:
+	aliases: /esp
+	trigger:
+		set {ep%arg-1%.%player%} to location of player
+		send "&d%arg-1%を保存しました。" to player
+command /pointteleport [<text>]:
+	aliases: /ept
+	trigger:
+		teleport player to {ep%arg-1%.%player%}
+		send "&a%arg-1%にテレポートしました" to player
+command /move [<text>]:
+	trigger:
+		if arg-1 is not set:
+			send "&a「/move」単体では動きません。「/move list」を入力してください。"
+		if arg-1 is "lobby":
+			if player is in "free_world":
+				command "emvtp %player% world 0 20 0"
+			command "tp %player% 0 20 0"
+		if arg-1 is "mining":
+			command "tp %player% 500 20 500"
+			set {eq.id.move_mining.clear::%player%} to 1
+		if arg-1 is "pve":
+			command "tp %player% -500 20 -500"
+		if arg-1 is "pvp":
+			command "tp %player% -500 20 500"
+		if arg-1 is "casino":
+			command "tp %player% 500.5 21 -490"
+		if arg-1 is "list":
+			send "=====move list=====" to player
+			send "-lobby" to player
+			send "-mining" to player
+			send "-pve" to player
+			send "-pvp" to player
+			send "-casino" to player
