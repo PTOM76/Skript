@@ -1,0 +1,29 @@
+options:
+	#----Config----
+	# 初参加のメッセージ
+	firstJoinText: &d%player%&d was first joined!
+	# 通常参加のメッセージ
+	joinText: &e%player%&e was joined!
+	# 通常退出のメッセージ
+	quitText: &c%player%&c was quited!
+	# 初参加のテレポート
+	firstJoinTp: 7 60 1
+	#----------------
+
+# 初参加のときの処理(SKできない人は下記のようにcommand"(コマンド)"で記入しましょう。)
+function firstJoin(p: player):
+	command "/tp %{_p}% {@firstJoinTp}"
+	command "/spawnpoint %{_p}% {@firstJoinTp}"
+
+# 参加のときの処理
+on join:
+	if {first.joined::%player%} is set:
+		set the join message to "{@joinText}"
+	else:
+		set the join message to "{@firstJoinText}"
+		set {first.joined::%player%} to true
+		firstJoin(player)
+
+# 退出のときの処理
+on quit:
+	set the quit message to "{@quitText}"

@@ -1,0 +1,43 @@
+options:
+	gm.message.s: "ゲームモードがサバイバルモードに変更されました"
+	gm.message.c: "ゲームモードがクリエイティブモードに変更されました"
+	gm.message.a: "ゲームモードがアドベンチャーモードに変更されました"
+	gm.message.sp:"ゲームモードがスペクテイターモードに変更されました"
+
+command /gm [<text>] [<player>]:
+	permission: admin
+	trigger:
+		if arg-2 is set:
+			set {_gm.player} to arg-2
+		if arg-2 is not set:
+			set {_gm.player} to player
+		if arg-1 is set:
+			if arg-1 is "creative" or "c" or "1":
+				set {_gm.player}'s gamemode to creative
+				send {@gm.message.c} to {_gm.player}
+			if arg-1 is "survival" or "s" or "0":
+				set {_gm.player}'s gamemode to survival
+				send {@gm.message.s} to {_gm.player}
+			if arg-1 is "spectator" or "sp" or "3":
+				set {_gm.player}'s gamemode to spectator
+				send {@gm.message.sp} to {_gm.player}
+			if arg-1 is "adventure" or "a" or "2":
+				set {_gm.player}'s gamemode to adventure
+				send {@gm.message.a} to {_gm.player}
+		if arg-1 is not set:
+			if {_gm.player}'s gamemode is creative:
+				set {_gm.player}'s gamemode to adventure
+				send {@gm.message.a} to {_gm.player}
+				stop
+			if {_gm.player}'s gamemode is adventure:
+				set {_gm.player}'s gamemode to survival
+				send {@gm.message.s} to {_gm.player}
+				stop
+			if {_gm.player}'s gamemode is survival:
+				set {_gm.player}'s gamemode to spectator
+				send {@gm.message.sp} to {_gm.player}
+				stop
+			if {_gm.player}'s gamemode is spectator:
+				set {_gm.player}'s gamemode to creative
+				send {@gm.message.c} to {_gm.player}
+				stop
