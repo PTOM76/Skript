@@ -1,0 +1,12 @@
+on right click:
+	if name of the tool of player contains "§e§lCasinor Energy":
+		remove 1 of player's tool from player's tool
+		sound(player, "block.brewing_stand.brew")
+		if (random integer between 1 and 12) is 6:
+			add 150000 to {money::%player%}
+			send "&aおめでとうございます！賞金&e150000&6P&aが当たりました！"
+			sound(player, "ui.toast.challenge_complete")
+		else:
+			send "&c残念ながらあなたはハズレでした..."
+function sound(p: player, sound: text):
+	play sound "%{_sound}%" with volume 1 and pitch 1 at {_p} for {_p}
