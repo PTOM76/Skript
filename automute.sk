@@ -1,0 +1,40 @@
+on command "minecraft:say":
+	if {mute_time::%player%} is greater than or equal to 1:
+		send "&cあなたはミュートされています。(ミュート解除まで%{mute_time::%player%}%&c分)" to player
+		cancel event
+on command "say":
+	if {mute_time::%player%} is greater than or equal to 1:
+		send "&cあなたはミュートされています。(ミュート解除まで%{mute_time::%player%}%&c分)" to player
+		cancel event
+on chat:
+	if {mute_time::%player%} is greater than or equal to 1:
+		send "&cあなたはミュートされています。(ミュート解除まで%{mute_time::%player%}%&c分)" to player
+		cancel event
+	set {_m} to message
+	if {chat-1::%player%} is set:
+		if {chat-1::%player%} is {_m}:
+			add 1 to {same_message::%player%}
+			if {same_message::%player%} is 19:
+				send "&4%player%さんは20回以上連続で、同じメッセージを送信したため、5分間ミュートとなります。(%{same_message::%player%}+1%回)" to all players
+				set {mute_time::%player%} to 5
+				stop
+			if {same_message::%player%} is greater than or equal to 4:
+				send "&4[警告]&f5回以上連続で、同じメッセージを送信しないでください。(%{same_message::%player%}+1%回)" to player
+		else:
+			delete {same_message::%player%}
+			set {chat-1::%player%} to {_m}
+	else:
+		delete {same_message::%player%}
+		set {chat-1::%player%} to {_m}
+every 1 minutes:
+	loop all players:
+		if {mute_time::%loop-player%} is set:
+			if {mute_time::%loop-player%} is not 0:
+				remove 1 from {mute_time::%loop-player%}
+			if {mute_time::%loop-player%} is 0:
+				delete {mute_time::%loop-player%}
+				send "&aミュートが解除されました。" to loop-player
+command /unmute [<player>]:
+	permission: admin
+	trigger:
+		delete {mute_time::%player%}
