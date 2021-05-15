@@ -1,0 +1,60 @@
+# MiningCompressionSkript #
+
+# RequestPlugins: Skript, (SkBee or skNbeet)
+ 
+command /compression [<text>] [<integer>] [<player>]:
+	aliases: /compre
+	trigger:
+		if arg-3 is set:
+			if executor is player:
+				if player is op:
+					set {_p} to arg-3
+				else:
+					send "&c‚ ‚È‚½‚ÉƒvƒŒƒCƒ„[‚ğw’è‚·‚éŒ ŒÀ‚Í‚ ‚è‚Ü‚¹‚ñB" to player
+			else:
+				set {_p} to arg-3
+		else:
+			set {_p} to player
+		if arg-2 is less than or equal to 0:
+			send "&cArg-2‚Ì”’l‚Í1ˆÈã‚É‚µ‚Ä‚­‚¾‚³‚¢B" to player
+			stop
+		if arg-1 is "logx64":
+			if number of all oak log with nbt "" in {_p}'s inventory is less than (arg-2 * 64):
+				send "&cŒ´–Ø(x64)‚ª‘«‚è‚Ü‚¹‚ñB" to {_p}
+				stop
+			remove (arg-2 * 64) of oak log with nbt "" from {_p}'s inventory
+			# «‚í‚©‚è‚â‚·‚­‚ ‚¦‚ÄƒRƒ}ƒ“ƒh‚É‚µ‚Ä‚Ü‚·B
+			command "/give %{_p}% log %arg-2% 0 {ench:[{lvl:1s,id:70s}],Unbreakable:1b,HideFlags:63,display:{Name:""˜e„w˜d64˜b”{ˆ³k˜aŒ´–Ø˜e„w""}}"
+			stop
+		if arg-1 is "logx4096":
+			if number of all oak log with nbt "{ench:[{lvl:1s,id:70s}],Unbreakable:1b,HideFlags:63,display:{Name:""˜e„w˜d64˜b”{ˆ³k˜aŒ´–Ø˜e„w""}}" in {_p}'s inventory is less than (arg-2 * 64):
+				send "&c64”{ˆ³kŒ´–Ø(x64)‚ª‘«‚è‚Ü‚¹‚ñB" to {_p}
+				stop
+			remove (arg-2 * 64) of oak log with nbt "{ench:[{lvl:1s,id:70s}],Unbreakable:1b,HideFlags:63,display:{Name:""˜e„w˜d64˜b”{ˆ³k˜aŒ´–Ø˜e„w""}}" from {_p}'s inventory
+			command "/give %{_p}% log %arg-2% 0 {ench:[{lvl:1s,id:70s}],Unbreakable:1b,HideFlags:63,display:{Name:""˜e„w˜d4096˜b”{ˆ³k˜aŒ´–Ø˜e„w""}}"
+			stop
+		if arg-1 is "logx8192":
+			if number of all oak log with nbt "{ench:[{lvl:1s,id:70s}],Unbreakable:1b,HideFlags:63,display:{Name:""˜e„w˜d4096˜b”{ˆ³k˜aŒ´–Ø˜e„w""}}" in {_p}'s inventory is less than (arg-2 * 64):
+				send "&c4096”{ˆ³kŒ´–Ø(x2)‚ª‘«‚è‚Ü‚¹‚ñB" to {_p}
+				stop
+			remove (arg-2 * 64) of oak log with nbt "{ench:[{lvl:1s,id:70s}],Unbreakable:1b,HideFlags:63,display:{Name:""˜e„w˜d4096˜b”{ˆ³k˜aŒ´–Ø˜e„w""}}" from {_p}'s inventory
+			command "/give %{_p}% log %arg-2% 0 {ench:[{lvl:1s,id:70s}],Unbreakable:1b,HideFlags:63,display:{Name:""˜e„w˜d8192˜b”{ˆ³k˜aŒ´–Ø˜e„w""}}"
+			stop
+		if arg-1 is "logx16384":
+			if number of all oak log with nbt "{ench:[{lvl:1s,id:70s}],Unbreakable:1b,HideFlags:63,display:{Name:""˜e„w˜d8192˜b”{ˆ³k˜aŒ´–Ø˜e„w""}}" in {_p}'s inventory is less than (arg-2 * 64):
+				send "&c8192”{ˆ³kŒ´–Ø(x2)‚ª‘«‚è‚Ü‚¹‚ñB" to {_p}
+				stop
+			remove (arg-2 * 64) of oak log with nbt "{ench:[{lvl:1s,id:70s}],Unbreakable:1b,HideFlags:63,display:{Name:""˜e„w˜d8192˜b”{ˆ³k˜aŒ´–Ø˜e„w""}}" from {_p}'s inventory
+			command "/give %{_p}% log %arg-2% 0 {ench:[{lvl:1s,id:70s}],Unbreakable:1b,HideFlags:63,display:{Name:""˜e„w˜d16384˜b”{ˆ³k˜aŒ´–Ø˜e„w""}}"
+			stop
+		send "/compre [logx64|logx4096|logx8192|logx16384] [integer] ([player])" to player
+		stop
+command /compre_sign [<text>] [<text>] [<int>]:
+	permission: admin
+	trigger:
+		if arg-1 is set:
+			if arg-2 is set:
+				command "/give %player% minecraft:sign 1 0 {BlockEntityTag:{Text1:""[{\""text\"":\""\"",\""clickEvent\"":{\""action\"":\""run_command\"",\""value\"":\""compre %arg-1% 1 @p\""}},{\""text\"":\""[\"",\""bold\"":true},{\""text\"":\""\\u53f3\\u30af\\u30ea\\u30c3\\u30af\""},{\""text\"":\""]\"",\""bold\"":true}]"",Text2:""{\""text\"":\""%arg-2%\\u306e\\u5727\\u7e2e\\u770b\\u677f\""}"",Text3:""[\""\"",{\""text\"":\""%arg-2%\"",\""bold\"":true},{\""text\"":\""x\""},{\""text\"":\""%arg-3%\"",\""color\"":\""green\""}]"",Text4:""[\""\"",{\""text\"":\""[\"",\""bold\"":true},{\""text\"":\""\\u53f3\\u30af\\u30ea\\u30c3\\u30af\""},{\""text\"":\""]\"",\""bold\"":true}]""},display:{Name:""%arg-2%‚Ìˆ³kŠÅ”Â""}}"
+				stop
+		send "/compre_sign [logx64|logx4096|logx8192|logx16384] [string(–¼Ì)] [”]"
+		stop
